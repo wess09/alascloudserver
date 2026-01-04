@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { Form, Input, Button, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, ArrowRightOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,62 +34,96 @@ const Login = () => {
     }, 600);
   };
 
+  const bgGradient = isDarkMode 
+    ? 'linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1a2e)' 
+    : 'linear-gradient(-45deg, #007AFF, #00C6FB, #005BEA, #007AFF)';
+    
+  const glassBg = isDarkMode
+    ? 'rgba(30, 30, 30, 0.65)'
+    : 'rgba(255, 255, 255, 0.7)';
+    
+  const glassBorder = isDarkMode
+    ? '1px solid rgba(255, 255, 255, 0.1)'
+    : '1px solid rgba(255, 255, 255, 0.5)';
+
   return (
     <div style={{ 
       minHeight: '100vh', 
       display: 'flex', 
       justifyContent: 'center', 
       alignItems: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Fallback or dynamic bg
+      backgroundImage: bgGradient, 
+      backgroundSize: '200% 200%',
+      animation: 'gradient 15s ease infinite',
       position: 'relative',
       overflow: 'hidden'
     }}>
+      {/* Theme Toggle */}
+      <div style={{ position: 'absolute', top: 24, right: 24, zIndex: 10 }}>
+        <Button
+          type="text"
+          shape="circle"
+          icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
+          onClick={toggleTheme}
+          style={{ 
+            color: isDarkMode ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)',
+            background: isDarkMode ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(10px)'
+          }}
+        />
+      </div>
+
       {/* Animated Background Elements */}
       <div style={{
         position: 'absolute',
-        top: '-10%',
-        left: '-10%',
-        width: '500px',
-        height: '500px',
-        background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%)',
-        filter: 'blur(60px)',
+        top: '20%',
+        left: '20%',
+        width: '30vw',
+        height: '30vw',
+        background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.4)',
+        borderRadius: '50%',
+        filter: 'blur(100px)',
         zIndex: 0,
-        animation: 'float 10s infinite ease-in-out'
+        animation: 'float 20s infinite ease-in-out'
       }} />
        <div style={{
         position: 'absolute',
-        bottom: '-10%',
-        right: '-10%',
-        width: '400px',
-        height: '400px',
-        background: 'radial-gradient(circle, rgba(50,100,255,0.3) 0%, rgba(50,100,255,0) 70%)',
-        filter: 'blur(80px)',
+        bottom: '20%',
+        right: '20%',
+        width: '25vw',
+        height: '25vw',
+        background: isDarkMode ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.4)',
+        borderRadius: '50%',
+        filter: 'blur(120px)',
         zIndex: 0,
-        animation: 'float 15s infinite ease-in-out reverse'
+        animation: 'float 25s infinite ease-in-out reverse'
       }} />
 
       <div className="glass-panel" style={{ 
         width: 420, 
         padding: '48px 32px',
         zIndex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        background: glassBg,
+        backdropFilter: 'blur(40px)',
+        border: glassBorder
       }}>
         <div style={{ marginBottom: 32 }}>
             <div style={{ 
-                width: 64, 
-                height: 64, 
-                background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
-                borderRadius: '16px',
                 margin: '0 auto 16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 8px 16px rgba(24,144,255,0.3)'
             }}>
-                <span style={{ color: 'white', fontSize: '28px', fontWeight: 'bold' }}>A</span>
+                <img src="/icon.svg" alt="logo" style={{ width: 80, height: 80, filter: 'drop-shadow(0 8px 16px rgba(0, 122, 255, 0.3))' }} />
             </div>
             
-          <Title level={2} style={{ marginBottom: 8, letterSpacing: '-0.5px' }}>Alas Cloud Plus</Title>
+          <Title level={2} style={{ 
+              marginBottom: 8, 
+              fontFamily: "'Orbitron', sans-serif", 
+              fontWeight: 700,
+              letterSpacing: '1px'
+          }}>Alas Cloud Plus</Title>
           <Text type="secondary" style={{ fontSize: '16px' }}>欢迎回来，请登录您的账户</Text>
         </div>
         
@@ -103,13 +139,13 @@ const Login = () => {
             rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input 
-                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,0.25)' }} />} 
+                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,0.4)' }} />} 
                 placeholder="用户名" 
                 style={{ 
                     borderRadius: '12px', 
                     padding: '10px 16px',
-                    background: 'rgba(255,255,255,0.5)',
-                    border: '1px solid transparent'
+                    background: isDarkMode ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.6)',
+                    border: '1px solid rgba(0,0,0,0.05)'
                 }}
             />
           </Form.Item>
@@ -119,13 +155,13 @@ const Login = () => {
             rules={[{ required: true, message: '请输入密码' }]}
           >
             <Input.Password
-              prefix={<LockOutlined style={{ color: 'rgba(0,0,0,0.25)' }} />}
+              prefix={<LockOutlined style={{ color: 'rgba(0,0,0,0.4)' }} />}
               placeholder="密码"
               style={{ 
                     borderRadius: '12px', 
                     padding: '10px 16px',
-                    background: 'rgba(255,255,255,0.5)',
-                    border: '1px solid transparent'
+                    background: isDarkMode ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.6)',
+                    border: '1px solid rgba(0,0,0,0.05)'
                 }}
             />
           </Form.Item>
@@ -160,10 +196,15 @@ const Login = () => {
       </div>
       
       <style>{`
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
         @keyframes float {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(20px, 20px); }
-          100% { transform: translate(0, 0); }
+          0% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(20px, 20px) rotate(10deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
         }
       `}</style>
     </div>

@@ -10,7 +10,7 @@ import {
   CloudServerOutlined,
   TeamOutlined,
   KeyOutlined,
-  bulbOutlined,
+  BulbOutlined,
   BugOutlined,
   SettingOutlined,
   MenuUnfoldOutlined,
@@ -124,20 +124,27 @@ const MainLayout = () => {
         <div style={{ 
             height: 64, 
             margin: '16px', 
-            borderRadius: 12, 
             display: 'flex', 
             alignItems: 'center', 
-            justifyContent: center, 
-            background: 'rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(10px)',
-            color: 'var(--text-color)', 
-            fontWeight: 'bold',
-            fontSize: collapsed ? '16px' : '20px',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
+            justifyContent: 'center', 
+            gap: 12,
             transition: 'all 0.3s'
         }}>
-            {collapsed ? 'AC' : 'Alas Cloud'}
+            <img src="/icon.svg" alt="logo" style={{ width: 32, height: 32, flexShrink: 0 }} />
+            {!collapsed && (
+                <span style={{ 
+                    fontFamily: "'Orbitron', sans-serif", 
+                    fontWeight: 900, 
+                    fontSize: '18px',
+                    background: 'linear-gradient(to right, #00C6FB, #005BEA)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    whiteSpace: 'nowrap',
+                    letterSpacing: '1px'
+                }}>
+                    ALAS CLOUD
+                </span>
+            )}
         </div>
 
         <Menu 
